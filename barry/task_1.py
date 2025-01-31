@@ -12,7 +12,6 @@ import IPython
 import PIL
 import matplotlib.pyplot as plt
 import os
-import io
 import cv2
 import IPython.display
 import PIL.Image
@@ -213,17 +212,17 @@ def task1_get_tf_dataset(task, data_dir, batch_size=1):
 
 # RMSE
 @keras.saving.register_keras_serializable()
-def rmse(y_true, y_pred):
+def t1_rmse(y_true, y_pred):
     return tf.math.sqrt(tf.reduce_mean(tf.math.square(y_true - y_pred)))
 
 # MAE
 @keras.saving.register_keras_serializable()
-def mae(y_true, y_pred):
+def t1_mae(y_true, y_pred):
     return tf.reduce_mean(tf.abs(y_true - y_pred))
 
 # KL divergence
 @keras.saving.register_keras_serializable()
-def kl_divergence(y_true, y_pred):
+def t1_kl_divergence(y_true, y_pred):
     y_true = tf.clip_by_value(y_true, 1e-10, 1)  # avoid log(0)
     y_pred = tf.clip_by_value(y_pred, 1e-10, 1)
 
@@ -234,13 +233,13 @@ def kl_divergence(y_true, y_pred):
 
 # reconstruction loss
 @keras.saving.register_keras_serializable()
-def reconstruction_loss(y_true, y_pred):
+def t1_reconstruction_loss(y_true, y_pred):
     return tf.reduce_mean(tf.math.square(y_true - y_pred))
 
 # total loss = reconstruction loss + KL divergence
 @keras.saving.register_keras_serializable()
-def total_loss(y_true, y_pred):
-    return reconstruction_loss(y_true, y_pred) + kl_divergence(y_true, y_pred)
+def t1_total_loss(y_true, y_pred):
+    return t1_reconstruction_loss(y_true, y_pred) + t1_kl_divergence(y_true, y_pred)
 
 def task1_build_model(input_shape):
     """
